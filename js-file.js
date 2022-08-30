@@ -8,13 +8,13 @@ let shouldClearCalculation = false;
 let screen = document.getElementById("display");
 
 const sumBtn = document.querySelector(".btn-sum");
+const clearBtn = document.querySelector(".btn-clear");
 const operatorBtns = document.getElementsByClassName("btn-operator");
 const numberBtns = document.getElementsByClassName("btn-num");
 
 screen.textContent = "";
 
 const operate = function (btnContent) {
-  console.log(curOperator + "passed the cur operator to operate");
   curOperator === "+" && add(firNumber, secNumber);
   curOperator === "-" && substract(firNumber, secNumber);
   curOperator === "*" && multiply(firNumber, secNumber);
@@ -25,50 +25,53 @@ const operate = function (btnContent) {
 
 //assign functions /////////////////
 const assignNumbers = function (btnContent) {
+  if (curOperator === "") {
+    shouldClearCalculation = true;
+    shouldClearInput = true;
+    clear();
+  }
   screen.textContent = btnContent;
   firNumber === "" ? (firNumber = btnContent) : (secNumber = btnContent);
-  console.log(firNumber + " This is the first number");
-  console.log(secNumber + " This is the second number");
+  console.log(firNumber + ".. this is the first number");
+  console.log(secNumber + ".. this is the second number");
 };
 
 const assignOperator = function (btnContent) {
+  curOperator !== "" && operate();
   curOperator = btnContent;
 };
 
 //operators and clear functions /////////////////
 
 const add = function (firParam, secParam) {
-  console.log("passed into add function");
-  screen.textContent = firNumber = parseInt(firParam) + parseInt(secParam);
-  shouldClearInput = true;
-  clear();
+  firNumber = parseInt(firParam) + parseInt(secParam);
+  updateScreen();
 };
 const substract = function (firParam, secParam) {
-  screen.textContent = firNumber = parseInt(firParam) - parseInt(secParam);
-  shouldClearInput = true;
-  clear();
+  firNumber = parseInt(firParam) - parseInt(secParam);
+  updateScreen();
 };
 const multiply = function (firParam, secParam) {
-  screen.textContent = firNumber = parseInt(firParam) * parseInt(secParam);
-  shouldClearInput = true;
-  clear();
+  firNumber = parseInt(firParam) * parseInt(secParam);
+  updateScreen();
 };
 const divide = function (firParam, secParam) {
-  screen.textContent = firNumber = parseInt(firParam) / parseInt(secParam);
-  shouldClearInput = true;
-  clear();
+  firNumber = parseInt(firParam) / parseInt(secParam);
+  updateScreen();
+};
+
+const updateScreen = function () {
+  screen.textContent = firNumber;
 };
 
 const clear = function () {
   if (shouldClearInput && shouldClearCalculation) {
-    firNumber = "";
-    secNumber = "";
-    curOperator = "";
-    shouldClearInput = false;
-    shouldClearCalculation = false;
-  } else if (shouldClearInput) {
-    secNumber = "";
-    curOperator = "";
+    firNumber = secNumber = curOperator = "";
+    screen.textContent = firNumber;
+    console.log("clear function called with first option");
+    shouldClearInput = shouldClearCalculation = false;
+  } else if (!shouldClearCalculation) {
+    secNumber = curOperator = "";
     shouldClearInput = false;
   }
 };
@@ -83,3 +86,8 @@ Array.from(numberBtns).forEach((btn) =>
 );
 
 sumBtn.addEventListener("click", operate.bind(this, sumBtn.textContent));
+clearBtn.addEventListener("click", function () {
+  shouldClearCalculation = true;
+  shouldClearInput = true;
+  clear();
+});
