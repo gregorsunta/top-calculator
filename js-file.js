@@ -39,16 +39,22 @@ const assignOperator = function (newOperatorValue) {
   if (newOperatorValue === "-" && !primValue && !tempValue) {
     tempValue = newOperatorValue;
     updateScreen();
-  } else if (!primValue && tempValue) {
+  } else if (
+    !(primValue || primValue === 0) &&
+    (tempValue || tempValue === 0)
+  ) {
     primValue = tempValue;
     operatorValue = newOperatorValue;
     shouldClearTemp = true;
     updateScreen();
     clear();
-  } else if (primValue && tempValue) {
+  } else if (((primValue || primValue === 0) && tempValue) || tempValue === 0) {
     operate();
     operatorValue = newOperatorValue;
-  } else if (primValue && !tempValue) {
+  } else if (
+    (primValue || primValue === 0) &&
+    !(tempValue || tempValue === 0)
+  ) {
     operatorValue = newOperatorValue;
     console.log("primValue && !tempValue ..happened");
   }
@@ -72,8 +78,8 @@ const updateScreen = function () {
     tempValue % 1 === 0 && (screen.textContent = tempValue);
     tempValue % 1 !== 0 &&
       (screen.textContent = parseFloat(tempValue).toFixed(2));
-  } else if (!tempValue) {
-    primValue % 1 === 0 && (screen.textContent = tempValue);
+  } else if (tempValue !== "0") {
+    primValue % 1 === 0 && (screen.textContent = primValue);
     primValue % 1 !== 0 &&
       (screen.textContent = parseFloat(primValue).toFixed(2));
   }
