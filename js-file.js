@@ -20,10 +20,8 @@ const operate = function (btnContent) {
   curOperator === "*" && multiply(firNumber, secNumber);
   curOperator === "/" && divide(firNumber, secNumber);
   shouldClearInput = true;
-  //and other buttons
 };
 
-//assign functions /////////////////
 const assignNumbers = function (btnContent) {
   if (curOperator === "") {
     shouldClearCalculation = true;
@@ -40,8 +38,6 @@ const assignOperator = function (btnContent) {
   curOperator !== "" && operate();
   curOperator = btnContent;
 };
-
-//operators and clear functions /////////////////
 
 const add = function (firParam, secParam) {
   firNumber = parseInt(firParam) + parseInt(secParam);
@@ -75,8 +71,6 @@ const clear = function () {
     shouldClearInput = false;
   }
 };
-
-//event listeners
 
 Array.from(operatorBtns).forEach((btn) =>
   btn.addEventListener("click", assignOperator.bind(this, btn.textContent))
