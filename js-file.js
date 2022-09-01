@@ -1,108 +1,117 @@
 "use strict";
 
-let primValue = "";
-let tempValue = "";
-let operatorValue = "";
-let prevBtnValue = "";
-let shouldClearTemp = false;
-let shouldClearPrim = false;
-let shouldClearOperator = false;
-
-let screen = document.getElementById("display");
-
-const sumBtn = document.querySelector(".btn-sum");
+const displayOfCurValue = document.querySelector("#calculationDisplay");
+const displayOfPrevValue = document.querySelector("#prevCalculationDisplay");
+const oppositeBtn = document.querySelector(".btn-opposite");
 const clearBtn = document.querySelector(".btn-clear");
 const operatorBtns = document.getElementsByClassName("btn-operator");
 const numberBtns = document.getElementsByClassName("btn-num");
+const fractionBtn = document.querySelector(".btn-fraction");
 
-screen.textContent = "";
-const operate = function () {
-  operatorValue === "+" && add(primValue, tempValue);
-  operatorValue === "-" && substract(primValue, tempValue);
-  operatorValue === "*" && multiply(primValue, tempValue);
-  operatorValue === "/" && divide(primValue, tempValue);
-  // shouldClearOperator = true;
-  shouldClearTemp = true;
-  clear();
-  updateScreen();
-};
+// let cur = "";
+let prevValue = 0;
+let operator = "";
+let curValue = 0;
 
-const assignNumber = function (btnContent) {
-  tempValue += btnContent;
-  updateScreen();
-  console.log(primValue + ".. this is the primary value");
-  console.log(tempValue + ".. this is the temporary value");
-  console.log(operatorValue + ".. this is the operatorValue");
-};
-
-const assignOperator = function (newOperatorValue) {
-  if (newOperatorValue === "-" && !primValue && !tempValue) {
-    tempValue = newOperatorValue;
-    updateScreen();
-  } else if (
-    !(primValue || primValue === 0) &&
-    (tempValue || tempValue === 0)
-  ) {
-    primValue = tempValue;
-    operatorValue = newOperatorValue;
-    shouldClearTemp = true;
-    updateScreen();
-    clear();
-  } else if (((primValue || primValue === 0) && tempValue) || tempValue === 0) {
-    operate();
-    operatorValue = newOperatorValue;
-  } else if (
-    (primValue || primValue === 0) &&
-    !(tempValue || tempValue === 0)
-  ) {
-    operatorValue = newOperatorValue;
-    console.log("primValue && !tempValue ..happened");
+const operate = function (a, ope, b) {
+  console.log("a: " + a + " ope: " + ope + " b: " + b);
+  if (ope === "+") {
+    prevValue = add(parseFloat(a), parseFloat(b));
+  } else if (ope === "-") {
+    prevValue = substract(parseFloat(a), parseFloat(b));
+  } else if (ope === "*") {
+    prevValue = multiply(parseFloat(a), parseFloat(b));
+  } else if (ope === "/") {
+    prevValue = divide(parseFloat(a), parseFloat(b));
   }
+  operator = "";
+  curValue = 0;
+  updateDisplay();
+  /*   console.log(
+    "prevValue: " + prevValue + " ope: " + operator + " curValue: " + curValue
+  ); */
+
+  // console.log("operated..");
+  console.log("operate()");
 };
 
-const add = function (firParam, secParam) {
-  primValue = parseFloat(firParam) + parseFloat(secParam);
-};
-const substract = function (firParam, secParam) {
-  primValue = parseFloat(firParam) - parseFloat(secParam);
-};
-const multiply = function (firParam, secParam) {
-  primValue = parseFloat(firParam) * parseFloat(secParam);
-};
-const divide = function (firParam, secParam) {
-  primValue = parseFloat(firParam) / parseFloat(secParam);
+const displayNumber = function (btnValue) {
+  operator === "" && (curValue = prevValue = 0);
+  (curValue === " " || curValue === 0) && (displayOfCurValue.textContent = "");
+  curValue = displayOfCurValue.textContent += parseFloat(btnValue);
+  updateDisplay();
+  // console.log("prevValue: " + prevValue + " curValue: " + curValue);
 };
 
-const updateScreen = function () {
-  if (tempValue) {
-    tempValue % 1 === 0 && (screen.textContent = tempValue);
-    tempValue % 1 !== 0 &&
-      (screen.textContent = parseFloat(tempValue).toFixed(2));
-  } else if (tempValue !== "0") {
-    primValue % 1 === 0 && (screen.textContent = primValue);
-    primValue % 1 !== 0 &&
-      (screen.textContent = parseFloat(primValue).toFixed(2));
+const changeOperator = function (ope) {
+  //should reassign curValue to prevValue if there is no prevValue
+  //should operate with previousOperator if both values exist
+  if (prevValue === 0) {
+    changeCurToPrev();
+    updateDisplay();
+  } else if (curValue === 0) {
+    //do nothing - I should clean this up
+  } else {
+    operate(prevValue, operator, curValue);
   }
+  operator = ope;
+  // console.log("Selected operator: " + operator);
+};
+const changeCurToPrev = function () {
+  prevValue = curValue;
+  curValue = 0;
+};
+
+const oppositeNumber = function () {
+  curValue = curValue * -1;
+  updateDisplay();
+};
+
+const fractionNumber = function () {
+  curValue = curValue * 0.01;
+  console.log("percent button pressed");
+  updateDisplay();
+};
+
+const add = function (a, b) {
+  return a + b;
+};
+prevValue;
+const substract = function (a, b) {
+  return a - b;
+};
+const multiply = function (a, b) {
+  return a * b;
+};
+const divide = function (a, b) {
+  return a / b;
+};
+const updateDisplay = function () {
+  //if float, round to two decimals
+  curValue % 1 === 0 && (displayOfCurValue.textContent = parseFloat(curValue));
+  prevValue % 1 === 0 &&
+    (displayOfPrevValue.textContent = parseFloat(prevValue));
+  curValue % 1 !== 0 &&
+    (displayOfCurValue.textContent = parseFloat(curValue).toFixed(2));
+  prevValue % 1 !== 0 &&
+    (displayOfPrevValue.textContent = parseFloat(prevValue).toFixed(2));
 };
 
 const clear = function () {
-  shouldClearTemp && (tempValue = "");
-  shouldClearPrim && (primValue = "");
-  shouldClearOperator && (operatorValue = "");
-  updateScreen();
+  displayOfCurValue.textContent = curValue = 0;
+  displayOfPrevValue.textContent = prevValue = 0;
+  updateDisplay();
 };
 
-Array.from(operatorBtns).forEach((btn) =>
-  btn.addEventListener("click", assignOperator.bind(this, btn.textContent))
-);
-Array.from(numberBtns).forEach((btn) =>
-  btn.addEventListener("click", assignNumber.bind(this, btn.textContent))
-);
-
-sumBtn.addEventListener("click", operate.bind(this, sumBtn.textContent));
-clearBtn.addEventListener("click", function () {
-  shouldClearPrim = true;
-  shouldClearTemp = true;
-  shouldClearOperator = true;
-  clear();
+Array.from(numberBtns).forEach((btn) => {
+  btn.addEventListener("click", displayNumber.bind(this, btn.textContent));
 });
+Array.from(operatorBtns).forEach((btn) => {
+  btn.addEventListener("click", changeOperator.bind(this, btn.textContent));
+});
+equalsBtn.addEventListener("click", function () {
+  operate(prevValue, operator, curValue);
+});
+clearBtn.addEventListener("click", clear);
+oppositeBtn.addEventListener("click", oppositeNumber);
+fractionBtn.addEventListener("click", fractionNumber);
