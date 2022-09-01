@@ -4,9 +4,10 @@ const displayOfCurValue = document.querySelector("#calculationDisplay");
 const displayOfPrevValue = document.querySelector("#prevCalculationDisplay");
 const oppositeBtn = document.querySelector(".btn-opposite");
 const clearBtn = document.querySelector(".btn-clear");
+const fractionBtn = document.querySelector(".btn-fraction");
+const equalsBtn = document.querySelector(".btn-equals");
 const operatorBtns = document.getElementsByClassName("btn-operator");
 const numberBtns = document.getElementsByClassName("btn-num");
-const fractionBtn = document.querySelector(".btn-fraction");
 
 // let cur = "";
 let prevValue = 0;
@@ -36,7 +37,7 @@ const operate = function (a, ope, b) {
 };
 
 const displayNumber = function (btnValue) {
-  operator === "" && (curValue = prevValue = 0);
+  operator === "" && (prevValue = 0);
   (curValue === " " || curValue === 0) && (displayOfCurValue.textContent = "");
   curValue = displayOfCurValue.textContent += parseFloat(btnValue);
   updateDisplay();
@@ -76,7 +77,6 @@ const fractionNumber = function () {
 const add = function (a, b) {
   return a + b;
 };
-prevValue;
 const substract = function (a, b) {
   return a - b;
 };
