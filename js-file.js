@@ -6,6 +6,7 @@ const oppositeBtn = document.querySelector(".btn-opposite");
 const clearBtn = document.querySelector(".btn-clear");
 const fractionBtn = document.querySelector(".btn-fraction");
 const equalsBtn = document.querySelector(".btn-equals");
+const dotBtn = document.querySelector(".btn-dot");
 const operatorBtns = document.getElementsByClassName("btn-operator");
 const numberBtns = document.getElementsByClassName("btn-num");
 
@@ -39,9 +40,10 @@ const operate = function (a, ope, b) {
 const displayNumber = function (btnValue) {
   operator === "" && (prevValue = 0);
   (curValue === " " || curValue === 0) && (displayOfCurValue.textContent = "");
+  console.log("prevValue: " + prevValue + " curValue: " + curValue);
   curValue = displayOfCurValue.textContent += parseFloat(btnValue);
+  console.log("prevValue: " + prevValue + " curValue: " + curValue);
   updateDisplay();
-  // console.log("prevValue: " + prevValue + " curValue: " + curValue);
 };
 
 const changeOperator = function (ope) {
@@ -87,16 +89,18 @@ const divide = function (a, b) {
   return a / b;
 };
 const updateDisplay = function () {
-  //if float, round to two decimals
-  curValue % 1 === 0 && (displayOfCurValue.textContent = parseFloat(curValue));
+  // curValue % 1 === 0 && (displayOfCurValue.textContent = parseFloat(curValue));
+  displayOfCurValue.textContent = curValue;
   prevValue % 1 === 0 &&
     (displayOfPrevValue.textContent = parseFloat(prevValue));
-  curValue % 1 !== 0 &&
-    (displayOfCurValue.textContent = parseFloat(curValue).toFixed(2));
+  /*   curValue % 1 !== 0 &&
+    (displayOfCurValue.textContent = parseFloat(curValue).toFixed(2)); */
   prevValue % 1 !== 0 &&
     (displayOfPrevValue.textContent = parseFloat(prevValue).toFixed(2));
 };
-
+const addDot = function () {
+  displayOfCurValue.textContent += ".";
+};
 const clear = function () {
   displayOfCurValue.textContent = curValue = 0;
   displayOfPrevValue.textContent = prevValue = 0;
@@ -115,3 +119,4 @@ equalsBtn.addEventListener("click", function () {
 clearBtn.addEventListener("click", clear);
 oppositeBtn.addEventListener("click", oppositeNumber);
 fractionBtn.addEventListener("click", fractionNumber);
+dotBtn.addEventListener("click", addDot);
