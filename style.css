@@ -30,9 +30,8 @@
   padding: 15px;
 }
 
-#display {
-  width: calc(var(--calc-items-width));
-  height: var(--calc-display-height);
+#calculationDisplay,
+#prevCalculationDisplay {
   background-color: rgb(199, 199, 199);
   border-radius: var(--border-radius-display);
   /* margin: 10px; */
@@ -42,7 +41,17 @@
   align-items: end;
   font-size: 75px;
   font-weight: 500;
+}
+
+#prevCalculationDisplay {
   color: rgb(27, 27, 27);
+  width: calc(var(--calc-items-width));
+  height: var(--calc-display-height);
+}
+#calculationDisplay {
+  color: rgb(241, 157, 157);
+  width: calc(var(--calc-items-width));
+  height: var(--calc-display-height);
 }
 
 .buttons {
